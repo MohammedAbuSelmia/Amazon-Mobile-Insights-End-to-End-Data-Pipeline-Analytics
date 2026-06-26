@@ -39,22 +39,22 @@ def replace_name(name):
             return i.capitalize() 
        return 'unknown'
     
-     return curent_name 
+     return curent_name.capitalize()  
 data['Brand Name']=data.apply(replace_name,axis=1)
 print('after the edit  ****************************',(data["Brand Name"]=='unknown').sum())# this code to confirm the func working true
-print('********************',(data["Brand Name"]==np.nan).sum())
-print('*********************',(data["Brand Name"]=='Nan').sum())
+print('********************',(data["Brand Name"].isnan()).sum())
 print(data['Brand Name'].value_counts())# this code to confirm that he made the transfer
 
 
 
 # # ##--Clean Data in Price Column
-if 'Price' in data.columns:
-     data['Price']=data['Price'].str.replace('$',' ')
-     data['Price']=data['Price'].str.replace(',','')
-
-
 # print(data[data['Price'].str.contains(r'\$ |,',na=False)])# this code to sure the price do not contains $ or , becuse we want to sent to  sql server
+if 'Price' in data.columns:
+     data['Price']=data['Price'].str.replace(r'[$,]','',regex=True)
+     
+
+
+
 data['Price']=data['Price'].astype(float) # in this code we convert datatype frpm str to float
 # # print(data.info())# new i check up datatype
 meanPrice=np.mean(data['Price'])
